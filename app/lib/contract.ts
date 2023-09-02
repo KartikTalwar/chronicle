@@ -2,6 +2,8 @@ export const getOracleAddress = function(id: string): any {
   const addresses: Record<string, string> = {
     "ethusd": "0xc8A1F9461115EF3C1E84Da6515A88Ea49CA97660",
     "btcusd": "0x4B5aBFC0Fe78233b97C80b8410681765ED9fC29c",
+    "daiusd": "0xa7aA6a860D17A89810dE6e6278c58EB21Fa00fc4",
+    "maticusd": "0xa48c56e48A71966676d0D113EAEbe6BE61661F18",
   }
   return addresses[id]
 }
