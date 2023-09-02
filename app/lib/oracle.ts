@@ -6,7 +6,7 @@ import { createClient } from './client'
 const PRIVATE_KEY = process.env.PRIVATE_KEY as any
 
 
-export async function getFeed(id: string, chain: string) {
+export async function getFeed(id: string, chain: string, apiKey: string) {
   const account = privateKeyToAccount(PRIVATE_KEY)
   const functionName = 'readWithAge'
   const address = getOracleAddress(id)
@@ -14,6 +14,7 @@ export async function getFeed(id: string, chain: string) {
   const functionData = encodeFunctionData({
     abi: chronicleABI,
     functionName,
+    args: [id, apiKey]
   })
 
   const publicClient = createClient(chain)
@@ -27,7 +28,7 @@ export async function getFeed(id: string, chain: string) {
     abi: chronicleABI,
     functionName,
     data: data.data as any,
-  })
+  }) as any
 
   const output = {
     id,

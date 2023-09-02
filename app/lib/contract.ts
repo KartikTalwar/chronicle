@@ -5,10 +5,41 @@ export const getOracleAddress = function(id: string): any {
     "daiusd": "0xa7aA6a860D17A89810dE6e6278c58EB21Fa00fc4",
     "maticusd": "0xa48c56e48A71966676d0D113EAEbe6BE61661F18",
   }
-  return addresses[id]
+//   return addresses[id]
+  return "0x50C77eC54B4b10962aBA4A7Ae87551015837A9C7"
 }
 
 export const chronicleABI = [
+    {
+      "name": "readWithAge",
+      "constant": true,
+      "inputs": [
+        {
+          "name": "pairId",
+          "type": "string"
+        },
+        {
+          "name": "apiKey",
+          "type": "string"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "age",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+
+export const rawChronicleABI = [
       {
           "inputs": [
               {
