@@ -1,6 +1,6 @@
 import { encodeFunctionData, decodeFunctionResult, formatUnits } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts' 
-import { wagmiContract } from './contract'
+import { chronicleABI, getOracleAddress } from './contract'
 import { createClient } from './client'
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY as any
@@ -9,9 +9,10 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY as any
 export async function getFeed(id: string, chain: string) {
   const account = privateKeyToAccount(PRIVATE_KEY)
   const functionName = 'readWithAge'
+  const address = getOracleAddress(id)
 
   const functionData = encodeFunctionData({
-    abi: wagmiContract.abi,
+    abi: chronicleABI,
     functionName,
   })
 
@@ -19,11 +20,11 @@ export async function getFeed(id: string, chain: string) {
   const data = await publicClient.call({ 
     account,
     data: functionData,
-    to: wagmiContract.address,
+    to: address,
   })
 
   const decoded = decodeFunctionResult({
-    abi: wagmiContract.abi,
+    abi: chronicleABI,
     functionName,
     data: data.data as any,
   })
@@ -31,10 +32,10 @@ export async function getFeed(id: string, chain: string) {
   const output = {
     id,
     chain,
+    address,
     price: Number(formatUnits(decoded[0], 18)),
     age: Number(formatUnits(decoded[1], 0)),
     timestamp: new Date(parseInt(formatUnits(decoded[1], 0)) * 1000).toISOString(),
-    address: wagmiContract.address,
     raw: data.data,
   }
 
