@@ -1,15 +1,15 @@
+import { kv } from "@vercel/kv"
 import { encodeFunctionData, decodeFunctionResult, formatUnits } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts' 
 import { chronicleABI, getOracleAddress } from './contract'
-import { createClient } from './client'
-
-const PRIVATE_KEY = process.env.PRIVATE_KEY as any
+import { createAccount, createClient } from './client'
 
 
 export async function getFeed(id: string, chain: string, apiKey: string) {
-  const account = privateKeyToAccount(PRIVATE_KEY)
   const functionName = 'readWithAge'
   const address = getOracleAddress(id)
+
+  const pubKey = await kv.get(apiKey) as string
+  const account = createAccount(pubKey||"0x0000000000000000000000000000000000000000")
 
   const functionData = encodeFunctionData({
     abi: chronicleABI,

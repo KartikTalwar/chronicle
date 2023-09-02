@@ -16,6 +16,6 @@ export async function GET(request: Request, context: { params: any }) {
     if (error.includes("Invalid API key")) {
       return NextResponse.json({error: "Invalid API key"}, {status: 400})
     }
-    return NextResponse.json({error: e.details}, {status: 400})
+    return NextResponse.json({error: e.message}, {status: 400})
   }
 }

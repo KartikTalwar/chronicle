@@ -23,12 +23,12 @@ contract Chronicle {
     _;
   }
 
-  function addAddress(string memory apiKey) public onlyOwner {
-    allowedKeys[keccak256(abi.encodePacked(apiKey, msg.sender))] = true;
+  function addAddress(string memory apiKey, address addr) public onlyOwner {
+    allowedKeys[keccak256(abi.encodePacked(apiKey, addr))] = true;
   }
 
-  function removeAddress(string memory apiKey) public onlyOwner {
-    allowedKeys[keccak256(abi.encodePacked(apiKey, msg.sender))] = false;
+  function removeAddress(string memory apiKey, address addr) public onlyOwner {
+    allowedKeys[keccak256(abi.encodePacked(apiKey, addr))] = false;
   }
 
   function readWithAge(string memory pairId, string memory apiKey) public view returns (uint value, uint age) {
