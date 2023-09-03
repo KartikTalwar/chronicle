@@ -26,18 +26,13 @@ import {
 } from "@/components/ui/dialog"
 
 const navigation = [
-  { name: 'Home', href: '#' },
-  { name: 'Invoices', href: '#' },
-  { name: 'Clients', href: '#' },
-  { name: 'Expenses', href: '#' },
+  { name: 'Kronicle', href: '#' },
 ]
 const secondaryNavigation = [
   { name: 'General', href: '#', icon: UserCircleIcon, current: true },
-  { name: 'Security', href: '#', icon: FingerPrintIcon, current: false },
   { name: 'Notifications', href: '#', icon: BellIcon, current: false },
   { name: 'Plan', href: '#', icon: CubeIcon, current: false },
   { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Team members', href: '#', icon: UsersIcon, current: false },
 ]
 
 function classNames(...classes: any[]) {
@@ -63,7 +58,9 @@ function APIKeys() {
                     <ClipboardIcon className="h-5 w-5 text-gray-400 ml-2" aria-hidden="true" />
                   </div>
                   <span className="font-semibold text-gray-800 px-3 py-1">
+                    <a href={`/api/ethusd?key=${item.apiKey}`} target='_blank'>
                     {item.apiKey}
+                    </a>
                   </span>
                 </div>
               </dt>
