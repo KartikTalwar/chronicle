@@ -1,5 +1,5 @@
 "use client";
-import type { GetServerSideProps, NextPage } from 'next'
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import {  Switch } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import {
@@ -140,39 +140,37 @@ function CodeBlock(props: any) {
     <div>
       <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">REST API</h3>
       <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
-        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
-          <code className='text-sm text-black font-base'>
-            {`
-const apiKey = "afndi39502mn";
+        <SyntaxHighlighter language="javascript" className="w-full">
+        {`
+  const apiKey = "afndi39502mn";
 
-const response = await fetch("/api/ethusd?key="+apiKey);
-const result = await response.json();
+  const response = await fetch("/api/ethusd?key="+apiKey);
+  const result = await response.json();
 
-console.log('Price:', result.price);
-      `}
-          </code>
-        </pre>
+  console.log('Price:', result.price);
+        `}
+        </SyntaxHighlighter>
+        
       </div>
 
       <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">Ethers.js</h3>
       <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
-        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
-          <code className='text-sm text-black font-base'>
-            {`
-import { ethers } from 'ethers';
-const contractAddress = '0xFD5803565fa93cbF6658F1FDf2547f1ed0fD9B27';
-const contractABI = [...];
+      <SyntaxHighlighter language="javascript" className="w-full">
+      {`
+  import { ethers } from 'ethers';
+  const contractAddress = '0xFD5803565fa93cbF6658F1FDf2547f1ed0fD9B27';
+  const contractABI = [...];
 
-const apiKey = "afndi39502mn";
-const from = "0x705A9ccEEdeab1DCa662fccF72cC5000B80572D8";
+  const apiKey = "afndi39502mn";
+  const from = "0x705A9ccEEdeab1DCa662fccF72cC5000B80572D8";
 
-const result = await contract.readWithAge("ethusd", apiKey, {from});
+  const result = await contract.readWithAge("ethusd", apiKey, {from});
 
-console.log('Price:', result.value.toString());
-console.log('Age:', result.age.toString());
+  console.log('Price:', result.value.toString());
+  console.log('Age:', result.age.toString());
       `}
-          </code>
-        </pre>
+        </SyntaxHighlighter>
+        
       </div>
     </div>
   )
