@@ -7,7 +7,6 @@ export const getOracleAddress = function(id: string): any {
   }
 //   return addresses[id]
   return "0xB304dA8f20fdBB8982c5c472c25F4eE4503368D5"
-  return "0x50C77eC54B4b10962aBA4A7Ae87551015837A9C7"
 }
 
 export const chronicleABI = [
