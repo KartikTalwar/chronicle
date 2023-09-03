@@ -1,21 +1,22 @@
 import { createPublicClient, http, createWalletClient as walletClient } from 'viem'
-import { mainnet, sepolia } from 'viem/chains'
+import { mainnet, sepolia, goerli } from 'viem/chains'
 import { privateKeyToAccount, toAccount, signTypedData, signTransaction, signMessage } from 'viem/accounts'
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY as any
-const ALCHEMY = process.env.ALCHEMY || ''
+const GOERLI = process.env.GOERLI || ''
+const SEPOLIA = process.env.SEPOLIA || ''
 
 
 export function getRPC(network: string) {
   const hosts: {[name: string]: string} = {
-    "mainnet": ALCHEMY,
-    "sepolia": ALCHEMY,
+    "goerli": GOERLI,
+    "sepolia": SEPOLIA,
   }
   return hosts[network]
 }
 
 export function createClient(network: string) {
-  const chain = network === 'mainnet' ? mainnet : sepolia
+  const chain = network === 'goerli' ? goerli : sepolia
 
   return createPublicClient({
     chain,

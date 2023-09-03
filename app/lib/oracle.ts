@@ -1,6 +1,6 @@
 import { kv } from "@vercel/kv"
 import { encodeFunctionData, decodeFunctionResult, formatUnits } from 'viem'
-import { chronicleABI, getOracleAddress } from './contract'
+import { chronicleABI, getOracleAddress, requestNetworkABI } from './contract'
 import { createAccount, createClient, createWalletClient } from './client'
 
 
@@ -18,6 +18,24 @@ export async function registerAPIKey(apiKey: string, address: string) {
   })
 
   return data
+}
+
+
+export async function checkPayment(tx: string) {
+  const address = "0x399F5EE127ce7432E4921a61b8CF52b0af52cbfE"
+  const account = createAccount("")
+  const publicClient = createClient("goerli")
+  const data = await publicClient.getTransaction({hash: tx as any})
+  const sanitized = JSON.parse(JSON.stringify(data, (key, value) =>
+    typeof value === 'bigint'
+      ? value.toString()
+      : value
+  ));
+
+  if (sanitized.to.toLowerCase() !== address.toLowerCase()) {
+    return {success: false}
+  }
+  return {success: true}
 }
 
 

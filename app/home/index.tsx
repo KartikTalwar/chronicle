@@ -29,10 +29,10 @@ const navigation = [
   { name: 'Kronicle', href: '#' },
 ]
 const secondaryNavigation = [
-  { name: 'General', href: '#', icon: UserCircleIcon, current: true },
+  { name: 'General', href: '/home', icon: UserCircleIcon, current: true },
   { name: 'Notifications', href: '#', icon: BellIcon, current: false },
-  { name: 'Plan', href: '#', icon: CubeIcon, current: false },
-  { name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
+  { name: 'Plan', href: '/plans', icon: CubeIcon, current: false },
+  { name: 'Billing', href: '/billing', icon: CreditCardIcon, current: false },
 ]
 
 function classNames(...classes: any[]) {
@@ -41,7 +41,8 @@ function classNames(...classes: any[]) {
 
 function APIKeys() {
   const [keys, setKeys] = useState<any[]>([])
-  const [address, setAddress] = useState<string>('')
+  const [address, setAddress] = useState<string>("0x0A34371dc060875546D546a3106542F6eB62B774")
+  const [proof, setProof] = useState<string>('')
 
   return (
     <div className=''>
@@ -108,21 +109,36 @@ function APIKeys() {
               
               <input
                 type="text"
+                name="payment"
+                id="payment"
+                className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
+                placeholder='proof tx'
+                onChange={(e) => setProof(e.target.value)}
+              />
+              <input
+                type="text"
                 name="address"
                 id="address"
                 className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
                 placeholder='ethglobal.eth'
+                value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
               <button
                 type="button"
                 onClick={async () => {
-                  const req = await fetch('/api/create?address='+address)
-                  const response = await req.json()
-                  setKeys([
-                    ...keys,
-                    response
-                  ])
+                  const reqa = await fetch('/api/verify?tx='+proof)
+                  const responsea = await reqa.json()
+                  if (responsea.success) {
+                    const req = await fetch('/api/create?address='+address)
+                    const response = await req.json()
+                    setKeys([
+                      ...keys,
+                      response
+                    ])
+                  } else {
+                    alert('Invalid proof tx')
+                  }
                 }}
                 className=" items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >

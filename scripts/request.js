@@ -10,7 +10,7 @@
   
     const epkSignatureProvider = new EthereumPrivateKeySignatureProvider({
       method: Types.Signature.METHOD.ECDSA,
-    privateKey: process.env.PRIVATE_KEY, // Must include 0x prefix
+    privateKey: process.env.PRIVATE_KEY,
     });
   
     const requestClient = new RequestNetwork({
@@ -66,4 +66,6 @@
       const requestData = await req.waitForConfirmation();
 
       console.log(JSON.stringify(requestData));
+      console.log("\n\n")
+      console.log(`Created Request: ${requestData.requestId}`)
   })();
