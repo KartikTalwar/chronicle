@@ -1,6 +1,6 @@
 "use client";
 import type { GetServerSideProps, NextPage } from 'next'
-import { Dialog, Switch } from '@headlessui/react'
+import {  Switch } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import {
   BellIcon,
@@ -14,9 +14,16 @@ import {
 } from '@heroicons/react/24/outline'
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/20/solid'
 import { CursorArrowRaysIcon, EnvelopeOpenIcon } from '@heroicons/react/24/outline'
-import Price  from '../components/price'
+import Price  from '../../components/price'
 import { useEffect, useState } from 'react'
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 const navigation = [
   { name: 'Home', href: '#' },
@@ -38,9 +45,8 @@ function classNames(...classes: any[]) {
 }
 
 function APIKeys() {
-  const keys = [
-    {id: 1, address: "0xFD5803565fa93cbF6658F1FDf2547f1ed0fD9B27", apiKey: "afndi39502mn"}
-  ]
+  const [keys, setKeys] = useState<any[]>([])
+  const [address, setAddress] = useState<string>('')
 
   return (
     <div className=''>
@@ -50,7 +56,7 @@ function APIKeys() {
       <dl className="my-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
         {keys.map((item) => {
           return (
-            <div className="pt-6 sm:flex" key={item.id}>
+            <div className="pt-6 sm:flex" key={item.apiKey}>
               <dt className="font-medium text-gray-900 sm:flex-none sm:pr-6">
                 <div className="flex bg-gray-50 border rounded-md hover:bg-gray-100 cursor-pointer">
                   <div className='py-1 mt-0.5 border-r pr-1.5'>
@@ -89,9 +95,87 @@ function APIKeys() {
       </dl>
 
       <div className="flex border-t border-gray-100 pt-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-          <span aria-hidden="true">+</span> Generate another key
-        </button>
+        <Dialog>
+          <DialogTrigger>
+            <button type="button" className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+              <span aria-hidden="true">+</span> Generate another key
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add a new API Key</DialogTitle>
+              <DialogDescription>
+                Please enter an address to whitelist
+              </DialogDescription>
+            </DialogHeader>
+              
+              <input
+                type="text"
+                name="address"
+                id="address"
+                className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"
+                placeholder='ethglobal.eth'
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  const req = await fetch('/api/create?address='+address)
+                  const response = await req.json()
+                  setKeys([
+                    ...keys,
+                    response
+                  ])
+                }}
+                className=" items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Create API Key
+              </button>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  )
+}
+
+function CodeBlock(props: any) {
+  return (
+    <div>
+      <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">REST API</h3>
+      <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
+        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
+          <code className='text-sm text-black font-base'>
+            {`
+const apiKey = "afndi39502mn";
+
+const response = await fetch("/api/ethusd?key="+apiKey);
+const result = await response.json();
+
+console.log('Price:', result.price);
+      `}
+          </code>
+        </pre>
+      </div>
+
+      <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">Ethers.js</h3>
+      <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
+        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
+          <code className='text-sm text-black font-base'>
+            {`
+import { ethers } from 'ethers';
+const contractAddress = '0xFD5803565fa93cbF6658F1FDf2547f1ed0fD9B27';
+const contractABI = [...];
+
+const apiKey = "afndi39502mn";
+const from = "0x705A9ccEEdeab1DCa662fccF72cC5000B80572D8";
+
+const result = await contract.readWithAge("ethusd", apiKey, {from});
+
+console.log('Price:', result.value.toString());
+console.log('Age:', result.age.toString());
+      `}
+          </code>
+        </pre>
       </div>
     </div>
   )
@@ -149,42 +233,6 @@ function Stats(props: any) {
         })}
       </dl>
 
-      <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">REST API</h3>
-      <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
-        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
-          <code className='text-sm text-black font-base'>
-            {`
-const apiKey = "afndi39502mn";
-
-const response = await fetch("/api/ethusd?key="+apiKey);
-const result = await response.json();
-
-console.log('Price:', result.price);
-      `}
-          </code>
-        </pre>
-      </div>
-
-      <h3 className="text-base font-semibold leading-6 text-gray-900 mt-12">Ethers.js</h3>
-      <div className="flex border border-gray-200 rounded-lg mt-3 mb-6">
-        <pre className='bg-gray-200 px-5 w-full rounded-lg'>
-          <code className='text-sm text-black font-base'>
-            {`
-import { ethers } from 'ethers';
-const contractAddress = '0xFD5803565fa93cbF6658F1FDf2547f1ed0fD9B27';
-const contractABI = [...];
-
-const apiKey = "afndi39502mn";
-const from = "0x705A9ccEEdeab1DCa662fccF72cC5000B80572D8";
-
-const result = await contract.readWithAge("ethusd", apiKey, {from});
-
-console.log('Price:', result.value.toString());
-console.log('Age:', result.age.toString());
-      `}
-          </code>
-        </pre>
-      </div>
     </div>
   )
 }
@@ -228,38 +276,6 @@ export default function Pragma(props: any) {
             </a>
           </div>
         </div>
-        <Dialog as="div" className="lg:hidden" onClose={() => console.log(42)} open={false}>
-          <div className="fixed inset-0 z-50" />
-          <Dialog.Panel className="fixed inset-y-0 left-0 z-50 w-full overflow-y-auto bg-white px-4 pb-6 sm:max-w-sm sm:px-6 sm:ring-1 sm:ring-gray-900/10">
-            <div className="-ml-0.5 flex h-16 items-center gap-x-6">
-              <button type="button" className="-m-2.5 p-2.5 text-gray-700">
-                <span className="sr-only">Close menu</span>
-                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
-              <div className="-ml-0.5">
-                <a href="#" className="-m-1.5 block p-1.5">
-                  <span className="sr-only">Your Company</span>
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
-                </a>
-              </div>
-            </div>
-            <div className="mt-2 space-y-2">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-          </Dialog.Panel>
-        </Dialog>
       </header>
 
       <div className="mx-auto max-w-7xl pt-16 lg:flex lg:gap-x-16 lg:px-8">
@@ -301,6 +317,8 @@ export default function Pragma(props: any) {
             <APIKeys />
 
           </div>
+
+          <CodeBlock />
         </main>
       </div>
     </div>

@@ -1,7 +1,24 @@
 import { kv } from "@vercel/kv"
 import { encodeFunctionData, decodeFunctionResult, formatUnits } from 'viem'
 import { chronicleABI, getOracleAddress } from './contract'
-import { createAccount, createClient } from './client'
+import { createAccount, createClient, createWalletClient } from './client'
+
+
+export async function registerAPIKey(apiKey: string, address: string) {
+  const contractAddr = getOracleAddress("")
+  const account = createAccount("")
+
+  const walletClient = createWalletClient("sepolia")
+  const data = await walletClient.writeContract({ 
+    address: contractAddr,
+    abi: chronicleABI,
+    functionName: "addAddress",
+    args: [apiKey, address],
+    account,
+  })
+
+  return data
+}
 
 
 export async function getFeed(id: string, chain: string, apiKey: string) {

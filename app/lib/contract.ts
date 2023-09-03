@@ -36,7 +36,25 @@ export const chronicleABI = [
       "payable": false,
       "stateMutability": "view",
       "type": "function"
-    }
+    },
+    {
+      "name": "addAddress",
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "apiKey",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
   ]
 
 export const rawChronicleABI = [

@@ -1,4 +1,4 @@
-import { createPublicClient, http } from 'viem'
+import { createPublicClient, http, createWalletClient as walletClient } from 'viem'
 import { mainnet, sepolia } from 'viem/chains'
 import { privateKeyToAccount, toAccount, signTypedData, signTransaction, signMessage } from 'viem/accounts'
 
@@ -18,6 +18,15 @@ export function createClient(network: string) {
   const chain = network === 'mainnet' ? mainnet : sepolia
 
   return createPublicClient({
+    chain,
+    transport: http(getRPC(network)),
+  })
+}
+
+export function createWalletClient(network: string) {
+  const chain = network === 'mainnet' ? mainnet : sepolia
+
+  return walletClient({
     chain,
     transport: http(getRPC(network)),
   })
